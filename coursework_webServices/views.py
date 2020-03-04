@@ -251,15 +251,18 @@ def HandleRateRequest(request):
 
         module_instance_object = ModuleInstance.objects.get(module=module_object, academic_year=year,
                                                             module_semester=semester)
-        rat = Rating.objects.create(rating=rating, module=module_instance_object)
-        rat.professor_code.add(prof_object)
+        response.content = '3'
+
+        rat = Rating.objects.create(rating=rating, module=module_instance_object, professor_code=prof_object)
         rat.save()
 
         response.status_code = 200
         response.reason_phrase = 'OK'
-    except ObjectDoesNotExist:
+    except Exception as e:
+        e = str(e)
         response.status_code = 404
-        response.reason_phrase = 'Not Found'
+        response.reason_phrase = 'Records not found'
+
     return response
 
 
